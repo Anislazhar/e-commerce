@@ -6,7 +6,9 @@
         width: 100%;
         height: 100%;
 
+
         .directory__item {
+
             position: relative;
             width: 50%;
             height: 100%;
@@ -27,6 +29,7 @@
             }
 
             a {
+
                 border-radius: 25%;
                 color: wheat;
                 position: absolute;
@@ -45,6 +48,7 @@
                 border: 1px solid black;
 
                 &:hover {
+                    color: black;
                     background: rgba(255, 255, 255, 1);
                 }
 
