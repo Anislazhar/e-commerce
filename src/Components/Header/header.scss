@@ -51,6 +51,8 @@
                     margin-right: 0;
                 }
 
+
+
                 a,
                 span {
                     font-size: 1.8rem;
@@ -61,6 +63,18 @@
                     cursor: pointer;
                 }
 
+                a:hover,
+                span:hover {
+                    padding: 1rem 8px;
+                    border-radius: 15%;
+                    background-color: black;
+                    color: wheat;
+                }
+
+            }
+
+            li:hover {
+                color: blue;
             }
 
         }
