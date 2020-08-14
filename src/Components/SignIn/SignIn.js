@@ -3,6 +3,7 @@ import Button from "../Forms/Button/Button";
 import { signInWithGoogle, auth } from "./../../firebase/utils";
 import FormInput from "../Forms/FormInput/FormInput";
 import "./SignIn.scss";
+import AuthWrapper from "../AuthWrapper/AuthWrapper";
 
 const initialState = {
   email: "",
@@ -40,12 +41,12 @@ class SignIn extends Component {
 
   render() {
     const { email, password } = this.state;
+    const configAuthWrapper = {
+      headline: "logIn",
+    };
 
     return (
-      <div className="signin">
-        <div className="wrap">
-          <h2>Login</h2>
-        </div>
+      <AuthWrapper {...configAuthWrapper}>
         <div className="formWrap">
           <form onSubmit={this.handleSubmit}>
             <FormInput
@@ -70,7 +71,7 @@ class SignIn extends Component {
             </div>
           </form>
         </div>
-      </div>
+      </AuthWrapper>
     );
   }
 }

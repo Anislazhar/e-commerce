@@ -4,12 +4,13 @@ import { auth, handleUserProfile } from "./firebase/utils";
 import "./default.scss";
 // Layouts
 import MainLayout from "./Layouts/MainLayout/MainLayout";
+import HomepageLayout from "./Layouts/HomepageLayout/HomepageLayout";
 
 // Pages
 import Homepage from "./Pages/HomePage/Homepage";
 import Registration from "./Pages/Registration/Registration";
-import HomepageLayout from "./Layouts/HomepageLayout/HomepageLayout";
 import Login from "./Pages/Login/Login";
+import Recovery from "./Pages/Recovery/Recovery";
 
 const initialState = {
   currentUser: null,
@@ -86,6 +87,14 @@ class App extends Component {
                 </MainLayout>
               )
             }
+          />
+          <Route
+            path="/recovery"
+            render={() => (
+              <MainLayout>
+                <Recovery />
+              </MainLayout>
+            )}
           />
         </Switch>
       </div>
