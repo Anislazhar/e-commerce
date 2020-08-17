@@ -10,6 +10,7 @@ const initialState = {
   email: "",
   password: "",
   confirmPassword: "",
+  errors: [],
 };
 
 class SignUp extends Component {
@@ -31,7 +32,7 @@ class SignUp extends Component {
     event.preventDefault();
     const { displayName, email, password, confirmPassword } = this.state;
     if (password !== confirmPassword) {
-      const err = ["password don match"];
+      const err = ["password don´t match !"];
       this.setState({
         errors: err,
       });
@@ -64,13 +65,13 @@ class SignUp extends Component {
     return (
       <AuthWrapper {...configAuthWrapper}>
         <div className="formWrap">
-          {/* {errors.length > 0 && (
+          {errors.length > 0 && (
             <ul>
               {errors.map((err, index) => {
-                return <li key={index}>{ }</li>;
+                return <li key={index}>{err}</li>;
               })}
             </ul>
-          )} */}
+          )}
 
           <form onSubmit={this.handleFromSubmit}>
             <FormInput

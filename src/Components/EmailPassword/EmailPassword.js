@@ -5,7 +5,6 @@ import FormInput from "../Forms/FormInput/FormInput";
 import { auth } from "../../firebase/utils";
 import Button from "../Forms/Button/Button";
 import "./EmailPassword.scss";
-import { render } from "@testing-library/react";
 
 const initialState = {
   email: "",
