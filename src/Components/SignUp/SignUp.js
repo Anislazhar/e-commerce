@@ -67,10 +67,11 @@ class SignUp extends Component {
           {/* {errors.length > 0 && (
             <ul>
               {errors.map((err, index) => {
-                return <li key={index}>{err}</li>;
+                return <li key={index}>{ }</li>;
               })}
             </ul>
           )} */}
+
           <form onSubmit={this.handleFromSubmit}>
             <FormInput
               type="text"

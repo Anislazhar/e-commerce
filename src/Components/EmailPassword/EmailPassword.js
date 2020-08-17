@@ -1,11 +1,15 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import AuthWrapper from "./../AuthWrapper/AuthWrapper";
 import FormInput from "../Forms/FormInput/FormInput";
+import { auth } from "../../firebase/utils";
 import Button from "../Forms/Button/Button";
 import "./EmailPassword.scss";
+import { render } from "@testing-library/react";
 
 const initialState = {
   email: "",
+  errors: [],
 };
 
 class EmailPassword extends Component {
@@ -25,8 +29,33 @@ class EmailPassword extends Component {
     });
   }
 
+  handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const { email } = this.state;
+
+      const config = {
+        url: " http://localhost:3000/login",
+      };
+      await auth
+        .sendPasswordResetEmail(email, config)
+        .then(() => {
+          this.props.history.push("/login");
+        })
+        .catch(() => {
+          const err = ["Email not found, please try again. "];
+          this.setState({
+            errors: err,
+          });
+        });
+    } catch (err) {
+      //console.log(err);
+    }
+  };
+
   render() {
-    const { email } = this.state;
+    const { email, errors } = this.state;
     const configAuthWrapper = {
       headline: "Email Passowrd",
     };
@@ -34,7 +63,15 @@ class EmailPassword extends Component {
     return (
       <AuthWrapper {...configAuthWrapper}>
         <div className="formWrap">
-          <form>
+          {errors.length > 0 && (
+            <ul>
+              {errors.map((e, index) => {
+                return <li key={index}>{e}</li>;
+              })}
+            </ul>
+          )}
+
+          <form onSubmit={this.handleSubmit}>
             <FormInput
               type="email"
               name="email"
@@ -50,4 +87,4 @@ class EmailPassword extends Component {
   }
 }
 
-export default EmailPassword;
+export default withRouter(EmailPassword);

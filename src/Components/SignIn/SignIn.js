@@ -4,6 +4,7 @@ import { signInWithGoogle, auth } from "./../../firebase/utils";
 import FormInput from "../Forms/FormInput/FormInput";
 import "./SignIn.scss";
 import AuthWrapper from "../AuthWrapper/AuthWrapper";
+import { Link } from "react-router-dom";
 
 const initialState = {
   email: "",
@@ -68,6 +69,9 @@ class SignIn extends Component {
               <div className="row">
                 <Button onClick={signInWithGoogle}>Sign in With Google</Button>
               </div>
+            </div>
+            <div className="links">
+              <Link to="/recovery">Reset Passowrd</Link>
             </div>
           </form>
         </div>
