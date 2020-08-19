@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { withRouter } from "react-router-dom";
 import { auth, handleUserProfile } from "../../firebase/utils";
 import AuthWrapper from "../AuthWrapper/AuthWrapper";
 import FormInput from "../Forms/FormInput/FormInput";
@@ -34,8 +35,8 @@ const SignUp = (props) => {
         password,
       );
       await handleUserProfile(user, { displayName });
-
       reset();
+      props.history.push("/");
     } catch (err) {}
   };
 
@@ -90,4 +91,4 @@ const SignUp = (props) => {
   );
 };
 
-export default SignUp;
+export default withRouter(SignUp);

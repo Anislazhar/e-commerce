@@ -1,8 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import { auth } from "../../firebase/utils";
-
 import Logo from "../../assets/Snake-l ogo1.png";
 import "./header.scss";
 
@@ -20,6 +19,9 @@ const Header = (props) => {
         <div className="callToActions">
           {currentUser && (
             <ul>
+              <li>
+                <Link to="/dashboard">My Account </Link>
+              </li>
               <li>
                 <span onClick={() => auth.signOut()}>LogOut</span>
               </li>

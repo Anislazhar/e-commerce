@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { signInWithGoogle, auth } from "./../../firebase/utils";
 import Button from "../Forms/Button/Button";
 import AuthWrapper from "../AuthWrapper/AuthWrapper";
 import FormInput from "../Forms/FormInput/FormInput";
+
 import "./SignIn.scss";
 
 const SignIn = (props) => {
@@ -20,6 +21,7 @@ const SignIn = (props) => {
     try {
       await auth.signInWithEmailAndPassword(email, password);
       resetForm();
+      props.history.push("/");
     } catch (err) {
       // console.log();
     }
@@ -47,7 +49,9 @@ const SignIn = (props) => {
             placeholder="password"
             handleChange={(e) => setPassword(e.target.value)}
           />
+
           <Button type="submit">LogIn</Button>
+
           <div className="socialSignin">
             <div className="row">
               <Button onClick={signInWithGoogle}>Sign in With Google</Button>
@@ -62,4 +66,4 @@ const SignIn = (props) => {
   );
 };
 
-export default SignIn;
+export default withRouter(SignIn);
