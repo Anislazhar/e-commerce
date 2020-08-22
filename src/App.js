@@ -1,44 +1,41 @@
 import React, { useEffect } from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
-import { connect } from "react-redux";
-import { setCurrentUser } from "./Redux/User/user.action";
-import { auth, handleUserProfile } from "./firebase/utils";
+import { Route, Switch } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { checkUserSession } from "./Redux/User/user.action";
+
 import "./default.scss";
 // Layouts
-import MainLayout from "./Layouts/MainLayout/MainLayout";
-import HomepageLayout from "./Layouts/HomepageLayout/HomepageLayout";
+import MainLayout from "./Layouts/MainLayout";
+import HomepageLayout from "./Layouts/HomepageLayout";
+import AdminLayout from "./Layouts/AdminLayout";
+import DashboardLayout from "./Layouts/DashboardLayout";
+
 // Pages
 import Homepage from "./Pages/HomePage/Homepage";
 import Registration from "./Pages/Registration/Registration";
 import Login from "./Pages/Login/Login";
 import Recovery from "./Pages/Recovery/Recovery";
 import Dashboard from "./Pages/Dashboard/Dashboard";
-import WithAuth from "./hoc/WithAuth";
+import Admin from "./Pages/Admin";
+
 //hoc
+import WithAuth from "./hoc/WithAuth";
+import WithAdminAuth from "./hoc/withAdminAuth";
+
+// // components
+import AdminToolbar from "./Components/AdminToolbar";
 
 const App = (props) => {
-  const { setCurrentUser, currentUser } = props;
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const authListener = auth.onAuthStateChanged(async (userAuth) => {
-      if (userAuth) {
-        const userRef = await handleUserProfile(userAuth);
-        userRef.onSnapshot((snapshot) => {
-          setCurrentUser({
-            id: snapshot.id,
-            ...snapshot.data(),
-          });
-        });
-      }
-      setCurrentUser(userAuth);
-    });
-    return () => {
-      authListener();
-    };
+    dispatch(checkUserSession());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className="App">
+      <AdminToolbar />
       <Switch>
         <Route
           exact
@@ -77,10 +74,20 @@ const App = (props) => {
           path="/dashboard"
           render={() => (
             <WithAuth>
-              <MainLayout>
+              <DashboardLayout>
                 <Dashboard />
-              </MainLayout>
+              </DashboardLayout>
             </WithAuth>
+          )}
+        />
+        <Route
+          path="/admin"
+          render={() => (
+            <WithAdminAuth>
+              <AdminLayout>
+                <Admin />
+              </AdminLayout>
+            </WithAdminAuth>
           )}
         />
       </Switch>
@@ -88,12 +95,4 @@ const App = (props) => {
   );
 };
 
-const mapStateToProps = ({ user }) => ({
-  currentUser: user.currentUser,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

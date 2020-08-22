@@ -1,38 +1,50 @@
-import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
-import AuthWrapper from "./../AuthWrapper/AuthWrapper";
-import FormInput from "../Forms/FormInput/FormInput";
-import { auth } from "../../firebase/utils";
-import Button from "../Forms/Button/Button";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import {
+  resetUserState,
+  resetPasswordStart,
+} from "../../Redux/User/user.action";
+
 import "./EmailPassword.scss";
 
+import AuthWrapper from "./../AuthWrapper/AuthWrapper";
+import FormInput from "../Forms/FormInput/FormInput";
+import Button from "../Forms/Button/Button";
+
+const mapState = ({ user }) => ({
+  resetPasswordSuccess: user.resetPasswordSuccess,
+  userErr: user.userErr,
+});
+
 const EmailPassword = (props) => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const { resetPasswordSuccess, userErr } = useSelector(mapState);
   const [email, setEmail] = useState("");
   const [errors, setErrors] = useState([]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const config = {
-        url: " http://localhost:3000/login",
-      };
-      await auth
-        .sendPasswordResetEmail(email, config)
-        .then(() => {
-          props.history.push("/login");
-        })
-        .catch(() => {
-          const err = ["Email not found, please try again. "];
-          setErrors(err);
-        });
-    } catch (err) {
-      //console.log(err);
+  useEffect(() => {
+    if (resetPasswordSuccess) {
+      dispatch(resetUserState());
+      history.push("/login");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resetPasswordSuccess]);
+
+  useEffect(() => {
+    if (Array.isArray(userErr) && userErr.length > 0) {
+      setErrors(userErr);
+    }
+  }, [userErr]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(resetPasswordStart({ email }));
   };
 
   const configAuthWrapper = {
-    headline: "Email Passowrd",
+    headline: "Email Password",
   };
 
   return (
@@ -54,11 +66,12 @@ const EmailPassword = (props) => {
             placeholder="Email"
             handleChange={(e) => setEmail(e.target.value)}
           />
-          <Button type="submit">Email Passowrd</Button>
+
+          <Button type="submit">Email Password</Button>
         </form>
       </div>
     </AuthWrapper>
   );
 };
 
-export default withRouter(EmailPassword);
+export default EmailPassword;

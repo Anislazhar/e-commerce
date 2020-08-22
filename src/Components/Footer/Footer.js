@@ -2,12 +2,12 @@
 import React from "react";
 import "./Footer.scss";
 
-const footer = (props) => {
+const Footer = (props) => {
   return (
     <div className="footer">
-      <div className="wrap">©️ A.LAZHAR</div>
+      <div className="wrap">©️ 2020. Designed with ♥️ by Anis Lazhar</div>
     </div>
   );
 };
 
-export default footer;
+export default Footer;

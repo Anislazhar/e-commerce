@@ -1,34 +1,52 @@
-import React, { useState } from "react";
-import { Link, withRouter } from "react-router-dom";
-import { signInWithGoogle, auth } from "./../../firebase/utils";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
+import {
+  emailSignInStart,
+  googleSignInStart,
+} from "../../Redux/User/user.action";
+
+import "./SignIn.scss";
+
 import Button from "../Forms/Button/Button";
 import AuthWrapper from "../AuthWrapper/AuthWrapper";
 import FormInput from "../Forms/FormInput/FormInput";
 
-import "./SignIn.scss";
+const mapState = ({ user }) => ({
+  currentUser: user.currentUser,
+});
 
 const SignIn = (props) => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const { currentUser } = useSelector(mapState);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    if (currentUser) {
+      resetForm();
+      history.push("/");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser]);
 
   const resetForm = () => {
     setEmail("");
     setPassword("");
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      await auth.signInWithEmailAndPassword(email, password);
-      resetForm();
-      props.history.push("/");
-    } catch (err) {
-      // console.log();
-    }
+    dispatch(emailSignInStart({ email, password }));
+  };
+
+  const handleGoogleSignIn = () => {
+    dispatch(googleSignInStart());
   };
 
   const configAuthWrapper = {
-    headline: "logIn",
+    headline: "LogIn",
   };
 
   return (
@@ -42,11 +60,12 @@ const SignIn = (props) => {
             placeholder="Email"
             handleChange={(e) => setEmail(e.target.value)}
           />
+
           <FormInput
             type="password"
             name="password"
             value={password}
-            placeholder="password"
+            placeholder="Password"
             handleChange={(e) => setPassword(e.target.value)}
           />
 
@@ -54,11 +73,12 @@ const SignIn = (props) => {
 
           <div className="socialSignin">
             <div className="row">
-              <Button onClick={signInWithGoogle}>Sign in With Google</Button>
+              <Button onClick={handleGoogleSignIn}>Sign in with Google</Button>
             </div>
           </div>
+
           <div className="links">
-            <Link to="/recovery">Reset Passowrd</Link>
+            <Link to="/recovery">Reset Password</Link>
           </div>
         </form>
       </div>
@@ -66,4 +86,4 @@ const SignIn = (props) => {
   );
 };
 
-export default withRouter(SignIn);
+export default SignIn;
